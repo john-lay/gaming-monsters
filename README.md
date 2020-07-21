@@ -13,5 +13,10 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 * sprites created with [GB Tile Designer](http://www.devrs.com/gb/hmgd/gbtd.html)
 
 ## Lesson 3
-* [Joypad Inputs](https://github.com/john-lay/gaming-monsters/tree/master/lesson2)
+* [Joypad Inputs](https://github.com/john-lay/gaming-monsters/tree/master/lesson3)
 * Moves a sprite around the screen using the d-pad
+
+## Lesson 4
+* [background tiles](https://github.com/john-lay/gaming-monsters/tree/master/lesson4)
+* Draw a background and scroll across it
+* Tiles created with [GB Map Builder](http://www.devrs.com/gb/hmgd/gbmb.html)
