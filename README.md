@@ -11,3 +11,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 * [Sprites](https://github.com/john-lay/gaming-monsters/tree/master/lesson2)
 * Draws a sprite to screen and transforms the position to animate it off screen while flipping between 2 frames.
 * sprites created with [GB Tile Designer](http://www.devrs.com/gb/hmgd/gbtd.html)
+
+## Lesson 3
+* [Joypad Inputs](https://github.com/john-lay/gaming-monsters/tree/master/lesson2)
+* Moves a sprite around the screen using the d-pad
