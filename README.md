@@ -20,3 +20,11 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 * [background tiles](https://github.com/john-lay/gaming-monsters/tree/master/lesson4)
 * Draw a background and scroll across it
 * Tiles created with [GB Map Builder](http://www.devrs.com/gb/hmgd/gbmb.html)
+
+## ggbgfx (A variation on Lesson 4)
+* [background tiles created with ggbgfx](https://github.com/john-lay/gaming-monsters/tree/master/ggbgfx)
+* uses ggbgfx (`npm install -g ggbgfx-cli`) to create tileset and tile map from image
+* Original `vision-henge.png` scene taken from https://github.com/john-lay/dmg-adventure
+1. Generate a `png` tile-set from the original image with `ggbgfx tileset -o tileset.png .\vision-henge.png` This is the unique tiles used to build a scene
+2. Transform this tileset image into a `.c` tiledata array with `ggbgfx tiledata -o tileset.c -n mytileset .\tileset.png`
+3. Generate a tile-map using the tileset and the original image `ggbgfx tilemap -o tilemap.c -n mytilemap .\vision-henge.png .\tileset.png ` This is the scene data
