@@ -36,3 +36,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 6
 * [Sound](https://github.com/john-lay/gaming-monsters/tree/master/lesson6)
 * Play a jumping sound when any input is pressed
+
+## Lesson 7
+* [Noise](https://github.com/john-lay/gaming-monsters/tree/master/lesson7)
+* Play a static scratching noise when any input is pressed
