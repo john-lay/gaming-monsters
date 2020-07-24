@@ -32,3 +32,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 5
 * [Windows Layer](https://github.com/john-lay/gaming-monsters/tree/master/lesson5)
 * Add a heads-up display along the bottom of the screen
+
+## Lesson 6
+* [Sound](https://github.com/john-lay/gaming-monsters/tree/master/lesson6)
+* Play a jumping sound when any input is pressed

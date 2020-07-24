@@ -1,6 +1,6 @@
 @echo off
 
-set project="lesson5"
+set project="lesson6"
 if exist %project%\main.gb del %project%\main.gb
 if exist %project%\main.o del %project%\main.o
 if exist %project%\main.lst del %project%\main.lst
