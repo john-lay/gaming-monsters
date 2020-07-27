@@ -40,3 +40,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 7
 * [Noise](https://github.com/john-lay/gaming-monsters/tree/master/lesson7)
 * Play a static scratching noise when any input is pressed
+
+## Mix Assembly (asm) with C
+* [mix](https://github.com/john-lay/gaming-monsters/tree/master/mixasmc)
+* Call a function defined in assembly from c
