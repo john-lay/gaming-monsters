@@ -44,3 +44,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Mix Assembly (asm) with C
 * [mix](https://github.com/john-lay/gaming-monsters/tree/master/mixasmc)
 * Call a function defined in assembly from c
+
+## Lesson 8
+* [Jumping](https://github.com/john-lay/gaming-monsters/tree/master/lesson8)
+* Move a sprite left and right with a natural (gravity influencing) jump
