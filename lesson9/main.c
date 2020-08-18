@@ -38,7 +38,7 @@ void setupZelda()
 void setupOctorok()
 {
     octorok.x = 30;
-    octorok.y = 30;
+    octorok.y = 0;
     octorok.width = 16;
     octorok.height = 16;
 
@@ -54,6 +54,15 @@ void setupOctorok()
     moveCharacter(&octorok, octorok.x, octorok.y);
 }
 
+void performantDelay(UINT8 numloops)
+{
+    UINT8 i;
+    for (i = 0; i < numloops; i++)
+    {
+        wait_vbl_done();
+    }
+}
+
 void main()
 {
     set_sprite_data(0, 4, ZeldaSprite);
@@ -67,5 +76,27 @@ void main()
 
     while (1)
     {
+        if (joypad() & J_LEFT)
+        {
+            zelda.x -= 2;
+            moveCharacter(&zelda, zelda.x, zelda.y);
+        }
+        if (joypad() & J_RIGHT)
+        {
+            zelda.x += 2;
+            moveCharacter(&zelda, zelda.x, zelda.y);
+        }
+
+        octorok.y += 5;
+
+        if (octorok.y >= 144)
+        {
+            octorok.y = 0;
+            octorok.x = zelda.x;
+        }
+
+        moveCharacter(&octorok, octorok.x, octorok.y);
+
+        performantDelay(5);
     }
 }
