@@ -52,3 +52,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 9
 * [Meta-sprites](https://github.com/john-lay/gaming-monsters/tree/master/lesson9)
 * Combine multiple 8x8 sprites into larger sprites and move them together
+
+## Lesson 10
+* [Collision detection](https://github.com/john-lay/gaming-monsters/tree/master/lesson10)
+* Continue lesson 9 with collision detections
