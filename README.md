@@ -48,3 +48,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 8
 * [Jumping](https://github.com/john-lay/gaming-monsters/tree/master/lesson8)
 * Move a sprite left and right with a natural (gravity influencing) jump
+
+## Lesson 9
+* [Meta-sprites](https://github.com/john-lay/gaming-monsters/tree/master/lesson9)
+* Combine multiple 8x8 sprites into larger sprites and move them together
