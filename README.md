@@ -56,3 +56,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 10
 * [Collision detection](https://github.com/john-lay/gaming-monsters/tree/master/lesson10)
 * Continue lesson 9 with collision detections
+
+## Lesson 11
+* [Background Collision detection](https://github.com/john-lay/gaming-monsters/tree/master/lesson11)
+* Use map tiles and simple sprites to create a simple maze game
