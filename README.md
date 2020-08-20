@@ -64,3 +64,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 12
 * [Splash screen](https://github.com/john-lay/gaming-monsters/tree/master/lesson12)
 * Convert a png image to a background tileset and tilemap
+
+## Lesson 13
+* [Fade effects](https://github.com/john-lay/gaming-monsters/tree/master/lesson13)
+* Show a title screen and fade to a game screen
