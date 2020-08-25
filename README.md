@@ -68,3 +68,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 13
 * [Fade effects](https://github.com/john-lay/gaming-monsters/tree/master/lesson13)
 * Show a title screen and fade to a game screen
+
+## Lesson 14
+* [Keyboard](https://github.com/john-lay/gaming-monsters/tree/master/lesson14)
+* Allow a user to enter their name
