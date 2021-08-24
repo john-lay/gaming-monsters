@@ -72,3 +72,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Lesson 14
 * [Keyboard](https://github.com/john-lay/gaming-monsters/tree/master/lesson14)
 * Allow a user to enter their name
+
+## Zelda HUD
+* [Zelda HUD](https://github.com/john-lay/gaming-monsters/tree/master/zeldahud)
+* Build a heads-up display for Zelda's Adventure and write to the Windows Layer
