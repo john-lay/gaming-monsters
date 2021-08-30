@@ -4,6 +4,7 @@
 #include "zeldaMap.c"
 #include "tileset.c"
 #include "tilemap.c"
+#include "zeldaHud.c"
 
 void interruptLCD()
 {
@@ -16,6 +17,10 @@ void main()
     // load the windows tiles (rupee + hearts HUD)
     int numHudTiles = 15;
     set_bkg_data(0, numHudTiles, zeldaTiles); // there are 15 tiles in the HUD tile set
+    // set_win_tiles(0, 0, 20, 1, zeldaMap);
+
+    CalculateHud(zeldaMap, 321);
+
     set_win_tiles(0, 0, 20, 1, zeldaMap);
 
     // shift tile set
