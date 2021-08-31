@@ -1,5 +1,7 @@
 #include "zeldaHud.h"
 
+const int HEART_START_DRAW = 16;
+
 int GetNumberTile(int number)
 {
     switch (number)
@@ -68,9 +70,71 @@ void CalculateRupees(char *hud, int rupees)
     }
 }
 
-void CalculateHud(char *hud, int rupees)
+void CalculateHearts(char *hud, int maxHearts, int health)
+{
+    // max hearts is 14
+    // max health is 28 (2 half hearts)
+    int healthCounter = health;
+    int startDraw = HEART_START_DRAW - maxHearts + 3;
+
+    for (int i = 6; i < 19; i++)
+    {
+        if (i < startDraw)
+        {
+            hud[i] = ZELDA_HUD_BLANK;
+        }
+        else if (healthCounter > 2)
+        {
+            hud[i] = ZELDA_HUD_HEART_FULL;
+            healthCounter -= 2;
+            continue;
+        }
+        else if (healthCounter == 2)
+        {
+            hud[i] = ZELDA_HUD_HEART_FULL;
+            healthCounter -= 2;
+            continue;
+        }
+        else if (healthCounter == 1)
+        {
+            hud[i] = ZELDA_HUD_HEART_HALF;
+            healthCounter--;
+            continue;
+        }
+        else
+        {
+            hud[i] = ZELDA_HUD_HEART_EMPTY;
+        }
+    }
+
+    // special case for last heart as we nornally leave the last tile empty
+    if (maxHearts == 14)
+    {
+        if (health == 28)
+        {
+            hud[19] = ZELDA_HUD_HEART_FULL;
+        }
+        else if (health == 27)
+        {
+            hud[19] = ZELDA_HUD_HEART_HALF;
+        }
+        else
+        {
+            hud[19] = ZELDA_HUD_HEART_EMPTY;
+        }
+    }
+    else
+    {
+        hud[19] = ZELDA_HUD_BLANK;
+    }
+}
+
+void CalculateHud(char *hud, int rupees, int maxHearts, int health)
 {
 
     // set the rupee count
     CalculateRupees(hud, rupees);
+
+    // set the hearts
+    CalculateHearts(hud, maxHearts, health);
 }

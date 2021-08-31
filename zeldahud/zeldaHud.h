@@ -15,4 +15,4 @@
 #define ZELDA_HUD_HEART_HALF 0x0D;
 #define ZELDA_HUD_HEART_FULL 0x0E;
 
-void CalculateHud(char *hud, int rupees);
+void CalculateHud(char *hud, int rupees, int maxHearts, int health);

@@ -19,7 +19,7 @@ void main()
     set_bkg_data(0, numHudTiles, zeldaTiles); // there are 15 tiles in the HUD tile set
     // set_win_tiles(0, 0, 20, 1, zeldaMap);
 
-    CalculateHud(zeldaMap, 321);
+    CalculateHud(zeldaMap, 321, 4, 3);
 
     set_win_tiles(0, 0, 20, 1, zeldaMap);
 
