@@ -6,9 +6,61 @@
 #include "tilemap.c"
 #include "zeldaHud.c"
 
+BYTE healthChanged = 0;
+BYTE heartsChanged = 0;
+int oldHealth = 3;
+int newHealth = 3;
+int oldmaxHearts = 4;
+int newmaxHearts = 4;
+
 void interruptLCD()
 {
     HIDE_WIN;
+    if (healthChanged || heartsChanged)
+    {
+        oldHealth = newHealth;
+        oldmaxHearts = newmaxHearts;
+        healthChanged = 0;
+        heartsChanged = 0;
+        CalculateHud(zeldaMap, 321, newmaxHearts, newHealth);
+        set_win_tiles(0, 0, 20, 1, zeldaMap);
+    }
+}
+
+void incrementHealth()
+{
+    if (!healthChanged)
+    {
+        healthChanged = 1;
+        newHealth = 4;
+    }
+}
+
+void decrementHealth()
+{
+    if (!healthChanged)
+    {
+        healthChanged = 1;
+        newHealth = 3;
+    }
+}
+
+void incrementMaxHearts()
+{
+    if (!heartsChanged)
+    {
+        heartsChanged = 1;
+        newmaxHearts = 5;
+    }
+}
+
+void decrementMaxHearts()
+{
+    if (!heartsChanged)
+    {
+        heartsChanged = 1;
+        newmaxHearts = 4;
+    }
 }
 
 void main()
@@ -58,5 +110,21 @@ void main()
     {
         SHOW_WIN;
         wait_vbl_done();
+
+        switch (joypad())
+        {
+        case J_LEFT:
+            decrementHealth();
+            break;
+        case J_RIGHT:
+            incrementHealth();
+            break;
+        case J_DOWN:
+            decrementMaxHearts();
+            break;
+        case J_UP:
+            incrementMaxHearts();
+            break;
+        }
     }
 }
