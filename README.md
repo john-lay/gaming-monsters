@@ -27,7 +27,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 * Original `vision-henge.png` scene taken from https://github.com/john-lay/dmg-adventure
 1. Generate a `png` tile-set from the original image with `ggbgfx tileset -o tileset.png .\vision-henge.png` This is the unique tiles used to build a scene
 2. Transform this tileset image into a `.c` tiledata array with `ggbgfx tiledata -o tileset.c -n mytileset .\tileset.png`
-3. Generate a tile-map using the tileset and the original image `ggbgfx tilemap -o tilemap.c -n mytilemap .\vision-henge.png .\tileset.png ` This is the scene data
+3. Generate a tile-map using the tileset and the original image `ggbgfx tilemap -o tilemap.c -n mytilemap .\vision-henge.png .\tileset.png` This is the scene data
 
 ## Lesson 5
 * [Windows Layer](https://github.com/john-lay/gaming-monsters/tree/master/lesson5)
@@ -76,3 +76,7 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Zelda HUD
 * [Zelda HUD](https://github.com/john-lay/gaming-monsters/tree/master/zeldahud)
 * Build a heads-up display for Zelda's Adventure and write to the Windows Layer
+
+## Zelda BG Hack
+* [Zelda BG Hack](https://github.com/john-lay/gaming-monsters/tree/master/zeldabghack)
+* Hack the background layer to display a heads-up display for Zelda's Adventure
