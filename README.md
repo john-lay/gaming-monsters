@@ -80,3 +80,8 @@ Edit VS Code `includePath` settings and add `C:\gbdk\include\**`
 ## Zelda BG Hack
 * [Zelda BG Hack](https://github.com/john-lay/gaming-monsters/tree/master/zeldabghack)
 * Hack the background layer to display a heads-up display for Zelda's Adventure
+
+## Zelda Inventory
+* [Zelda Inventory](https://github.com/john-lay/gaming-monsters/tree/master/zeldainventory)
+* Fit all the treasures & weapons on a single screen by utlising a scrolling inventory
+* Tiles generated with [Tiled](https://www.mapeditor.org/) and converted to a tileset/tilemap with [ggbgfx]((https://github.com/john-lay/gaming-monsters/tree/master/ggbgfx))

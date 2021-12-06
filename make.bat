@@ -1,6 +1,6 @@
 @echo off
 
-set project="lesson14"
+set project="zeldainventory"
 if exist %project%\main.gb del %project%\main.gb
 if exist %project%\main.o del %project%\main.o
 if exist %project%\main.lst del %project%\main.lst
