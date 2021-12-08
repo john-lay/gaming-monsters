@@ -4,6 +4,7 @@
 
 UINT8 scrollOffset = 0;
 
+
 const unsigned char firestormMap[] = {0x30, 0x31, 0x3A, 0x3B};
 const unsigned char calmMap[] = {0x32, 0x33, 0x3C, 0x3D};
 const unsigned char shieldMap[] = {0x34, 0x35, 0x3E, 0x3F};
@@ -25,6 +26,9 @@ typedef enum
 // this needs to be dynamically populated based on GB Studio variable interrogation
 ZELDA_TREASURES treasures[6] = {ZELDA_TREASURE_FIRESTORM, ZELDA_TREASURE_CALM, ZELDA_TREASURE_SHIELD,
                                 ZELDA_TREASURE_RING, ZELDA_TREASURE_BOOK, ZELDA_TREASURE_UNDEFINED};
+
+ZELDA_TREASURES equipped = ZELDA_TREASURE_FIRESTORM; // this will be read from GB Studio
+UINT8 highlighted = 0; // if the equipped treasure is visible this is set to 1-6
 
 UBYTE GetBit(UINT8 byte, UINT8 bit)
 {
@@ -49,6 +53,9 @@ void populateTreasures()
             treasureMapIndex += 4;
 
             treasuresAdded++;
+
+            // if this spell is equipped show the cursor sprite over it
+            if(equipped == ZELDA_TREASURE_FIRESTORM) highlighted = i - scrollOffset + 1;
         }
         if (treasures[i] == ZELDA_TREASURE_CALM && treasuresAdded < maxTreasuresOnScreen)
         {
