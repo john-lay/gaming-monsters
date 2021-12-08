@@ -2,31 +2,126 @@
 #include "tileset.c"
 #include "tilemap.c"
 
-UBYTE hasScrolledLeft = 0;
+UINT8 scrollOffset = 0;
+
+const unsigned char firestormMap[] = {0x30, 0x31, 0x3A, 0x3B};
+const unsigned char calmMap[] = {0x32, 0x33, 0x3C, 0x3D};
+const unsigned char shieldMap[] = {0x34, 0x35, 0x3E, 0x3F};
+const unsigned char ringMap[] = {0x36, 0x37, 0x40, 0x41};
+const unsigned char bookMap[] = {0x38, 0x39, 0x42, 0x43};
+unsigned char treasureMap[] = {0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+                               0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08};
+
+typedef enum
+{
+    ZELDA_TREASURE_UNDEFINED = 0,
+    ZELDA_TREASURE_FIRESTORM,
+    ZELDA_TREASURE_CALM,
+    ZELDA_TREASURE_SHIELD,
+    ZELDA_TREASURE_RING,
+    ZELDA_TREASURE_BOOK,
+} ZELDA_TREASURES;
+
+// this needs to be dynamically populated based on GB Studio variable interrogation
+ZELDA_TREASURES treasures[6] = {ZELDA_TREASURE_FIRESTORM, ZELDA_TREASURE_CALM, ZELDA_TREASURE_SHIELD,
+                                ZELDA_TREASURE_RING, ZELDA_TREASURE_BOOK, ZELDA_TREASURE_UNDEFINED};
+
+UBYTE GetBit(UINT8 byte, UINT8 bit)
+{
+    return (byte & (1 << bit)) != 0;
+}
+
+void populateTreasures()
+{
+    UINT8 treasuresAdded = 0;
+    UINT8 treasureMapIndex = 0;
+    UINT8 maxTreasuresOnScreen = 3;
+
+    // iterate over the treasures array and populate the tileMap accordingly
+    for (UINT8 i = scrollOffset; i < 6; i++)
+    {
+        if (treasures[i] == ZELDA_TREASURE_FIRESTORM && treasuresAdded < maxTreasuresOnScreen)
+        {
+            treasureMap[treasureMapIndex] = firestormMap[0];
+            treasureMap[treasureMapIndex + 1] = firestormMap[1];
+            treasureMap[treasureMapIndex + 12] = firestormMap[2];
+            treasureMap[treasureMapIndex + 13] = firestormMap[3];
+            treasureMapIndex += 4;
+
+            treasuresAdded++;
+        }
+        if (treasures[i] == ZELDA_TREASURE_CALM && treasuresAdded < maxTreasuresOnScreen)
+        {
+            treasureMap[treasureMapIndex] = calmMap[0];
+            treasureMap[treasureMapIndex + 1] = calmMap[1];
+            treasureMap[treasureMapIndex + 12] = calmMap[2];
+            treasureMap[treasureMapIndex + 13] = calmMap[3];
+            treasureMapIndex += 4;
+
+            treasuresAdded++;
+        }
+        if (treasures[i] == ZELDA_TREASURE_SHIELD && treasuresAdded < maxTreasuresOnScreen)
+        {
+            treasureMap[treasureMapIndex] = shieldMap[0];
+            treasureMap[treasureMapIndex + 1] = shieldMap[1];
+            treasureMap[treasureMapIndex + 12] = shieldMap[2];
+            treasureMap[treasureMapIndex + 13] = shieldMap[3];
+            treasureMapIndex += 4;
+
+            treasuresAdded++;
+        }
+        if (treasures[i] == ZELDA_TREASURE_RING && treasuresAdded < maxTreasuresOnScreen)
+        {
+            treasureMap[treasureMapIndex] = ringMap[0];
+            treasureMap[treasureMapIndex + 1] = ringMap[1];
+            treasureMap[treasureMapIndex + 12] = ringMap[2];
+            treasureMap[treasureMapIndex + 13] = ringMap[3];
+            treasureMapIndex += 4;
+
+            treasuresAdded++;
+        }
+        if (treasures[i] == ZELDA_TREASURE_BOOK && treasuresAdded < maxTreasuresOnScreen)
+        {
+            treasureMap[treasureMapIndex] = bookMap[0];
+            treasureMap[treasureMapIndex + 1] = bookMap[1];
+            treasureMap[treasureMapIndex + 12] = bookMap[2];
+            treasureMap[treasureMapIndex + 13] = bookMap[3];
+            treasureMapIndex += 4;
+
+            treasuresAdded++;
+        }
+    }
+
+    set_bkg_tiles(4, 11, 12, 2, treasureMap);
+}
+
+UBYTE CanScrollLeft() 
+{
+    return scrollOffset > 0;
+}
+
+UBYTE CanScrollRight() 
+{
+    // TODO: calculate based on treasures acquired and slots available on screen
+    return scrollOffset < 2;
+}
 
 void ScrollLeft()
 {
-    if (!hasScrolledLeft)
+    if (CanScrollLeft())
     {
-        // replace the firestorm with the shield
-        unsigned char shieldMap[] = {0x34, 0x35, 0x3E, 0x3F};        
-        set_bkg_tiles(4, 11, 2, 2, shieldMap);
-
-        hasScrolledLeft = 1;
+        scrollOffset--;
+        populateTreasures();
     }
 }
 
 void ScrollRight()
 {
-    if (hasScrolledLeft)
+    if (CanScrollRight())
     {
-        // replace the shield with the firestorm
-        unsigned char firestormMap[] = {0x30,0x31, 0x3A,0x3B};      
-        set_bkg_tiles(4, 11, 2, 2, firestormMap);
-
-        hasScrolledLeft = 0;
+        scrollOffset++;
+        populateTreasures();
     }
-    
 }
 
 void main()
@@ -37,25 +132,24 @@ void main()
     SHOW_BKG;
     DISPLAY_ON;
 
-    // change the first 2 tiles of the firestorm to the shield
-    // unsigned char topShieldMap[] = {0x34, 0x35};
-    // set_bkg_tiles(4, 11, 2, 1, topShieldMap);
+    // update the treasure tiles
+    populateTreasures();
+    set_bkg_tiles(4, 11, 12, 2, treasureMap);
 
     SHOW_BKG;
     DISPLAY_ON;
 
     while (1)
     {
-        // scroll_bkg(1, 0);
-        // deay(100);
-
         switch (joypad())
         {
         case J_LEFT:
             ScrollLeft();
+            delay(100);
             break;
         case J_RIGHT:
             ScrollRight();
+            delay(100);
             break;
         }
     }
