@@ -140,8 +140,8 @@ void main()
     DISPLAY_ON;
 
     // update the treasure tiles
-    populateTreasures();
-    set_bkg_tiles(4, 11, 12, 2, treasureMap);
+    // populateTreasures();
+    // set_bkg_tiles(4, 11, 12, 2, treasureMap);
 
     SHOW_BKG;
     DISPLAY_ON;
