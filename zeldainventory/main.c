@@ -133,7 +133,16 @@ void ScrollRight()
 
 void main()
 {
-    set_bkg_data(0, 73, mytileset);
+    // load the core tiles that won't change
+    set_bkg_data(0, 22, staticTileset);
+
+    // load the appropriate emblem to indicate celestial signs collected
+    set_bkg_data(22, 32, celestial0tileset);
+
+    // load the weapons and treasures
+    set_bkg_data(54, 192, inventoryTileset);
+
+    // draw the background tiles
     set_bkg_tiles(0, 0, 20, 18, mytilemap);
 
     SHOW_BKG;
