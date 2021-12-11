@@ -4,15 +4,11 @@
 
 UINT8 scrollOffset = 0;
 
+unsigned char treasureMap[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-const unsigned char firestormMap[] = {0x30, 0x31, 0x3A, 0x3B};
-const unsigned char calmMap[] = {0x32, 0x33, 0x3C, 0x3D};
-const unsigned char shieldMap[] = {0x34, 0x35, 0x3E, 0x3F};
-const unsigned char ringMap[] = {0x36, 0x37, 0x40, 0x41};
-const unsigned char bookMap[] = {0x38, 0x39, 0x42, 0x43};
-unsigned char treasureMap[] = {0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
-                               0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08};
-
+unsigned char weaponsMap[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 typedef enum
 {
     ZELDA_TREASURE_UNDEFINED = 0,
@@ -28,7 +24,7 @@ ZELDA_TREASURES treasures[6] = {ZELDA_TREASURE_FIRESTORM, ZELDA_TREASURE_CALM, Z
                                 ZELDA_TREASURE_RING, ZELDA_TREASURE_BOOK, ZELDA_TREASURE_UNDEFINED};
 
 ZELDA_TREASURES equipped = ZELDA_TREASURE_FIRESTORM; // this will be read from GB Studio
-UINT8 highlighted = 0; // if the equipped treasure is visible this is set to 1-6
+UINT8 highlighted = 0;                               // if the equipped treasure is visible this is set to 1-6
 
 UBYTE GetBit(UINT8 byte, UINT8 bit)
 {
@@ -55,7 +51,8 @@ void populateTreasures()
             treasuresAdded++;
 
             // if this spell is equipped show the cursor sprite over it
-            if(equipped == ZELDA_TREASURE_FIRESTORM) highlighted = i - scrollOffset + 1;
+            if (equipped == ZELDA_TREASURE_FIRESTORM)
+                highlighted = i - scrollOffset + 1;
         }
         if (treasures[i] == ZELDA_TREASURE_CALM && treasuresAdded < maxTreasuresOnScreen)
         {
@@ -69,30 +66,30 @@ void populateTreasures()
         }
         if (treasures[i] == ZELDA_TREASURE_SHIELD && treasuresAdded < maxTreasuresOnScreen)
         {
-            treasureMap[treasureMapIndex] = shieldMap[0];
-            treasureMap[treasureMapIndex + 1] = shieldMap[1];
-            treasureMap[treasureMapIndex + 12] = shieldMap[2];
-            treasureMap[treasureMapIndex + 13] = shieldMap[3];
+            treasureMap[treasureMapIndex] = magicShieldMap[0];
+            treasureMap[treasureMapIndex + 1] = magicShieldMap[1];
+            treasureMap[treasureMapIndex + 12] = magicShieldMap[2];
+            treasureMap[treasureMapIndex + 13] = magicShieldMap[3];
             treasureMapIndex += 4;
 
             treasuresAdded++;
         }
         if (treasures[i] == ZELDA_TREASURE_RING && treasuresAdded < maxTreasuresOnScreen)
         {
-            treasureMap[treasureMapIndex] = ringMap[0];
-            treasureMap[treasureMapIndex + 1] = ringMap[1];
-            treasureMap[treasureMapIndex + 12] = ringMap[2];
-            treasureMap[treasureMapIndex + 13] = ringMap[3];
+            treasureMap[treasureMapIndex] = jadeRingMap[0];
+            treasureMap[treasureMapIndex + 1] = jadeRingMap[1];
+            treasureMap[treasureMapIndex + 12] = jadeRingMap[2];
+            treasureMap[treasureMapIndex + 13] = jadeRingMap[3];
             treasureMapIndex += 4;
 
             treasuresAdded++;
         }
         if (treasures[i] == ZELDA_TREASURE_BOOK && treasuresAdded < maxTreasuresOnScreen)
         {
-            treasureMap[treasureMapIndex] = bookMap[0];
-            treasureMap[treasureMapIndex + 1] = bookMap[1];
-            treasureMap[treasureMapIndex + 12] = bookMap[2];
-            treasureMap[treasureMapIndex + 13] = bookMap[3];
+            treasureMap[treasureMapIndex] = noiseMap[0];
+            treasureMap[treasureMapIndex + 1] = noiseMap[1];
+            treasureMap[treasureMapIndex + 12] = noiseMap[2];
+            treasureMap[treasureMapIndex + 13] = noiseMap[3];
             treasureMapIndex += 4;
 
             treasuresAdded++;
@@ -102,12 +99,12 @@ void populateTreasures()
     set_bkg_tiles(4, 11, 12, 2, treasureMap);
 }
 
-UBYTE CanScrollLeft() 
+UBYTE CanScrollLeft()
 {
     return scrollOffset > 0;
 }
 
-UBYTE CanScrollRight() 
+UBYTE CanScrollRight()
 {
     // TODO: calculate based on treasures acquired and slots available on screen
     return scrollOffset < 2;
@@ -143,7 +140,7 @@ void main()
     set_bkg_data(54, 192, inventoryTileset);
 
     // draw the background tiles
-    set_bkg_tiles(0, 0, 20, 18, mytilemap);
+    set_bkg_tiles(0, 0, 20, 18, questStatusMap);
 
     SHOW_BKG;
     DISPLAY_ON;
@@ -151,6 +148,19 @@ void main()
     // update the treasure tiles
     // populateTreasures();
     // set_bkg_tiles(4, 11, 12, 2, treasureMap);
+
+    weaponsMap[0] = turquoiseRingMap[0];
+    weaponsMap[1] = turquoiseRingMap[1];
+    weaponsMap[12] = turquoiseRingMap[2];
+    weaponsMap[13] = turquoiseRingMap[3];
+    set_bkg_tiles(4, 15, 12, 2, weaponsMap);
+    
+    treasureMap[0] = compass7Map[0];
+    treasureMap[1] = compass7Map[1];
+    treasureMap[12] = compass7Map[2];
+    treasureMap[13] = compass7Map[3];
+    set_bkg_tiles(4, 11, 12, 2, treasureMap);
+    
 
     SHOW_BKG;
     DISPLAY_ON;
