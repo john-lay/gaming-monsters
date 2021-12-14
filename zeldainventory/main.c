@@ -155,13 +155,32 @@ void populateTreasures()
     set_bkg_tiles(4, 11, 12, 2, treasureMap);
 }
 
+// reserve 8 tiles to represent the 6 on screen weapons plus 2 off screen
+const unsigned char weaponsMap[8][4] = {
+    {0x36, 0x37, 0x38, 0x39},
+    {0x3A, 0x3B, 0x3C, 0x3D},
+    {0x3E, 0x3F, 0x40, 0x41},
+    {0x42, 0x43, 0x44, 0x45},
+    {0x46, 0x47, 0x48, 0x49},
+    {0x4A, 0x4B, 0x4C, 0x4D},
+    {0x4E, 0x4F, 0x50, 0x51},
+    {0x52, 0x53, 0x54, 0x55},
+    };
+    
 void initialiseWeapons()
 {
+    UINT8 tileIndex = 54;
+    UINT8 weaponMapIndex = 0;
     // load the boomerang tile (starting from index 54 core + celestial)
-    set_bkg_data(54, 4, boomerangTileset);
-    const unsigned char firstWeaponMap[] = {0x36, 0x37, 0x38, 0x39};
-    // insertItemTileIntoTileMap(weaponMap, 0, (unsigned char[4]){0x36,0x37,0x38,0x39});
-    insertItemTileIntoTileMap(weaponMap, 0, firstWeaponMap);
+    set_bkg_data(tileIndex, 4, boomerangTileset);
+    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[0]);
+    tileIndex += 4; // move across 4 tiles in memory
+    weaponMapIndex += 2; // move across 2 tiles on screen
+
+    set_bkg_data(tileIndex, 4, bowArrowTileset);
+    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[1]);
+    tileIndex += 4; 
+    weaponMapIndex += 2;
 }
 
 void updateWeapons() 
