@@ -7,13 +7,14 @@ UINT8 scrollOffset = 0;
 ZELDA_TREASURES equipped = ZELDA_TREASURE_UNDEFINED; // this will be read from GB Studio
 UINT8 highlighted = 0;                               // if the equipped treasure is visible this is set to 1-6
 UINT8 totalTreasuresFound = 10;                      // calculated at the same time as treasures[] based on GB Studio interrogation
+UINT8 totalWeaponsFound = 19;
 const UINT8 maxItemsOnScreen = 6;
 
 unsigned char treasureMap[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 unsigned char weaponMap[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 // this needs to be dynamically populated based on GB Studio variable interrogation
 ZELDA_TREASURES treasures[10] = {ZELDA_TREASURE_PLANK,
@@ -165,27 +166,65 @@ const unsigned char weaponsMap[8][4] = {
     {0x4A, 0x4B, 0x4C, 0x4D},
     {0x4E, 0x4F, 0x50, 0x51},
     {0x52, 0x53, 0x54, 0x55},
-    };
-    
+};
+
 void initialiseWeapons()
 {
     UINT8 tileIndex = 54;
     UINT8 weaponMapIndex = 0;
+
     // load the boomerang tile (starting from index 54 core + celestial)
     set_bkg_data(tileIndex, 4, boomerangTileset);
     insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[0]);
-    tileIndex += 4; // move across 4 tiles in memory
+    tileIndex += 4;      // move across 4 tiles in memory
     weaponMapIndex += 2; // move across 2 tiles on screen
 
     set_bkg_data(tileIndex, 4, bowArrowTileset);
     insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[1]);
-    tileIndex += 4; 
+    tileIndex += 4;
     weaponMapIndex += 2;
+
+    set_bkg_data(tileIndex, 4, broadswordTileset);
+    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[2]);
+    tileIndex += 4;
+    weaponMapIndex += 2;
+
+    set_bkg_data(tileIndex, 4, calmTileset);
+    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[3]);
+    tileIndex += 4;
+    weaponMapIndex += 2;
+
+    set_bkg_data(tileIndex, 4, daggerTileset);
+    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[4]);
+    tileIndex += 4;
+    weaponMapIndex += 2;
+
+    set_bkg_data(tileIndex, 4, goldNecklaceTileset);
+    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[5]);
+    tileIndex += 4;
+    weaponMapIndex += 2;
+
+    set_bkg_data(tileIndex, 4, featherTileset);
+    // insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[6]);
+    tileIndex += 4;
+    // weaponMapIndex += 2;
+
+    set_bkg_data(tileIndex, 4, firestormTileset);
+    // insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[7]);
+    tileIndex += 4;
+    // weaponMapIndex += 2;
 }
 
-void updateWeapons() 
+void updateWeapons()
 {
-    
+    insertItemTileIntoTileMap(weaponMap, 0, weaponsMap[scrollOffset]);
+    insertItemTileIntoTileMap(weaponMap, 2, weaponsMap[scrollOffset + 1]);
+    insertItemTileIntoTileMap(weaponMap, 4, weaponsMap[scrollOffset + 2]);
+    insertItemTileIntoTileMap(weaponMap, 6, weaponsMap[scrollOffset + 3]);
+    insertItemTileIntoTileMap(weaponMap, 8, weaponsMap[scrollOffset + 4]);
+    insertItemTileIntoTileMap(weaponMap, 10, weaponsMap[scrollOffset + 5]);
+
+    set_bkg_tiles(4, 15, 12, 2, weaponMap);
 }
 
 UBYTE CanScrollLeft()
@@ -196,6 +235,16 @@ UBYTE CanScrollLeft()
 UBYTE CanScrollRight()
 {
     return scrollOffset < totalTreasuresFound - maxItemsOnScreen;
+}
+
+UBYTE CanScrollUp()
+{
+    return scrollOffset > 0;
+}
+
+UBYTE CanScrollDown()
+{
+    return scrollOffset < totalWeaponsFound - maxItemsOnScreen;
 }
 
 void ScrollLeft()
@@ -218,14 +267,20 @@ void ScrollRight()
 
 void ScrollUp()
 {
-    scrollOffset--;
-    updateWeapons();
+    if (CanScrollUp())
+    {
+        scrollOffset--;
+        updateWeapons();
+    }
 }
 
 void ScrollDown()
 {
-    scrollOffset++;
-    updateWeapons();
+    if (CanScrollDown())
+    {
+        scrollOffset++;
+        updateWeapons();
+    }
 }
 
 void main()
@@ -233,7 +288,7 @@ void main()
     // load the core tiles that won't change (22 tiles)
     set_bkg_data(0, 22, staticTileset);
 
-    // load the appropriate emblem to indicate celestial signs collected 
+    // load the appropriate emblem to indicate celestial signs collected
     // 32 tiles starting at index 22 (after the 22 core tiles)
     set_bkg_data(22, 32, celestial0tileset);
 
