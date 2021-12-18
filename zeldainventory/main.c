@@ -7,14 +7,14 @@ UINT8 scrollOffset = 0;
 ZELDA_TREASURES equipped = ZELDA_TREASURE_UNDEFINED; // this will be read from GB Studio
 UINT8 highlighted = 0;                               // if the equipped treasure is visible this is set to 1-6
 UINT8 totalTreasuresFound = 10;                      // calculated at the same time as treasures[] based on GB Studio interrogation
-UINT8 totalWeaponsFound = 19;
+UINT8 totalWeaponsFound = 18;
 const UINT8 maxItemsOnScreen = 6;
 
 unsigned char treasureMap[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-unsigned char weaponMap[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+unsigned char weaponContainer[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 // this needs to be dynamically populated based on GB Studio variable interrogation
 ZELDA_TREASURES treasures[10] = {ZELDA_TREASURE_PLANK,
@@ -53,111 +53,16 @@ UBYTE GetBit(UINT8 byte, UINT8 bit)
     return (byte & (1 << bit)) != 0;
 }
 
-void insertItemTileIntoTileMap(unsigned char array[], UINT8 index, unsigned char item[])
+void placeItemOnScreen(unsigned char item[], unsigned char container[], UINT8 slot)
 {
-    array[index] = item[0];
-    array[index + 1] = item[1];
-    array[index + 12] = item[2];
-    array[index + 13] = item[3];
+    container[slot] = item[0];
+    container[slot + 1] = item[1];
+    container[slot + 12] = item[2];
+    container[slot + 13] = item[3];
 }
 
-void populateTreasures()
-{
-    UINT8 treasuresAdded = 0;
-    UINT8 treasureMapIndex = 0;
-
-    // iterate over the treasures array and populate the tileMap accordingly
-    for (UINT8 i = scrollOffset; i < maxItemsOnScreen + scrollOffset; i++)
-    {
-        if (treasures[i] == ZELDA_TREASURE_PLANK && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, plankMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-
-            // if this spell is equipped show the cursor sprite over it
-            if (equipped == ZELDA_TREASURE_PLANK)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_RAFT && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, raftMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_RAFT)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_REDBOOTS && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, redBootsMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_REDBOOTS)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_REPELLENT && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, repellentMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_REPELLENT)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_RUG && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, rugMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_RUG)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_SALTCELLAR && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, saltcellarMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_SALTCELLAR)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_TICKETA && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, ticketAMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_TICKETA)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_TICKETB && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, ticketBMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_TICKETB)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_VIALOFWIND && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, vialWindMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_VIALOFWIND)
-                highlighted = i - scrollOffset + 1;
-        }
-        if (treasures[i] == ZELDA_TREASURE_WATERBOTTLE && treasuresAdded < maxItemsOnScreen)
-        {
-            insertItemTileIntoTileMap(treasureMap, treasureMapIndex, waterBottleMap);
-            treasureMapIndex += 2;
-            treasuresAdded++;
-            if (equipped == ZELDA_TREASURE_WATERBOTTLE)
-                highlighted = i - scrollOffset + 1;
-        }
-    }
-
-    set_bkg_tiles(4, 11, 12, 2, treasureMap);
-}
-
-// reserve 8 tiles to represent the 6 on screen weapons plus 2 off screen
-const unsigned char weaponsMap[8][4] = {
+// reserve 8 slots to represent the 6 on screen weapons plus 2 off screen
+const unsigned char weaponSlots[8][4] = {
     {0x36, 0x37, 0x38, 0x39},
     {0x3A, 0x3B, 0x3C, 0x3D},
     {0x3E, 0x3F, 0x40, 0x41},
@@ -175,32 +80,32 @@ void initialiseWeapons()
 
     // load the boomerang tile (starting from index 54 core + celestial)
     set_bkg_data(tileIndex, 4, boomerangTileset);
-    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[0]);
+    placeItemOnScreen(weaponSlots[0], weaponContainer, weaponMapIndex);
     tileIndex += 4;      // move across 4 tiles in memory
     weaponMapIndex += 2; // move across 2 tiles on screen
 
     set_bkg_data(tileIndex, 4, bowArrowTileset);
-    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[1]);
+    placeItemOnScreen(weaponSlots[1], weaponContainer, weaponMapIndex);
     tileIndex += 4;
     weaponMapIndex += 2;
 
     set_bkg_data(tileIndex, 4, broadswordTileset);
-    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[2]);
+    placeItemOnScreen(weaponSlots[2], weaponContainer, weaponMapIndex);
     tileIndex += 4;
     weaponMapIndex += 2;
 
     set_bkg_data(tileIndex, 4, calmTileset);
-    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[3]);
+    placeItemOnScreen(weaponSlots[3], weaponContainer, weaponMapIndex);
     tileIndex += 4;
     weaponMapIndex += 2;
 
     set_bkg_data(tileIndex, 4, daggerTileset);
-    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[4]);
+    placeItemOnScreen(weaponSlots[4], weaponContainer, weaponMapIndex);
     tileIndex += 4;
     weaponMapIndex += 2;
 
     set_bkg_data(tileIndex, 4, goldNecklaceTileset);
-    insertItemTileIntoTileMap(weaponMap, weaponMapIndex, weaponsMap[5]);
+    placeItemOnScreen(weaponSlots[5], weaponContainer, weaponMapIndex);
     tileIndex += 4;
     weaponMapIndex += 2;
 
@@ -215,16 +120,120 @@ void initialiseWeapons()
     // weaponMapIndex += 2;
 }
 
-void updateWeapons()
+void addWeaponToVram(ZELDA_WEAPONS weapon)
 {
-    insertItemTileIntoTileMap(weaponMap, 0, weaponsMap[scrollOffset]);
-    insertItemTileIntoTileMap(weaponMap, 2, weaponsMap[scrollOffset + 1]);
-    insertItemTileIntoTileMap(weaponMap, 4, weaponsMap[scrollOffset + 2]);
-    insertItemTileIntoTileMap(weaponMap, 6, weaponsMap[scrollOffset + 3]);
-    insertItemTileIntoTileMap(weaponMap, 8, weaponsMap[scrollOffset + 4]);
-    insertItemTileIntoTileMap(weaponMap, 10, weaponsMap[scrollOffset + 5]);
+    // tile index starts at 54 and moves 4 tiles for each new item
+    UINT8 tileIndex = 54;
 
-    set_bkg_tiles(4, 15, 12, 2, weaponMap);
+    if (scrollOffset > 2)
+    {
+        tileIndex += (scrollOffset - 2) * 4;
+    }
+
+    // check if we've written to the end of 8*4 tile slots reserved for weapons
+    if (scrollOffset > 9)
+    {
+        tileIndex = 54;
+        tileIndex += (scrollOffset - 10) * 4;
+    }
+
+    switch (weapon)
+    {
+    case ZELDA_WEAPON_BOOMERANG:
+        set_bkg_data(tileIndex, 4, boomerangTileset);
+        break;
+    case ZELDA_WEAPON_BOWANDARROW:
+        set_bkg_data(tileIndex, 4, bowArrowTileset);
+        break;
+    case ZELDA_WEAPON_BROADSWORD:
+        set_bkg_data(tileIndex, 4, broadswordTileset);
+        break;
+    case ZELDA_WEAPON_CALM:
+        set_bkg_data(tileIndex, 4, calmTileset);
+        break;
+    case ZELDA_WEAPON_DAGGER:
+        set_bkg_data(tileIndex, 4, daggerTileset);
+        break;
+    case ZELDA_WEAPON_GOLDNECKLACE:
+        set_bkg_data(tileIndex, 4, goldNecklaceTileset);
+        break;
+    case ZELDA_WEAPON_FEATHER:
+        set_bkg_data(tileIndex, 4, featherTileset);
+        break;
+    case ZELDA_WEAPON_FIRESTORM:
+        set_bkg_data(tileIndex, 4, firestormTileset);
+        break;
+    case ZELDA_WEAPON_HAMMER:
+        set_bkg_data(tileIndex, 4, hammerTileset);
+        break;
+    case ZELDA_WEAPON_JADEAMULET:
+        set_bkg_data(tileIndex, 4, jadeAmuletTileset);
+        break;
+    case ZELDA_WEAPON_JADERING:
+        set_bkg_data(tileIndex, 4, jadeRingTileset);
+        break;
+    case ZELDA_WEAPON_JOUST:
+        set_bkg_data(tileIndex, 4, joustTileset);
+        break;
+    case ZELDA_WEAPON_NOISE:
+        set_bkg_data(tileIndex, 4, noiseTileset);
+        break;
+    case ZELDA_WEAPON_PYROS:
+        set_bkg_data(tileIndex, 4, pyrosTileset);
+        break;
+    case ZELDA_WEAPON_RINGSOFFIRE:
+        set_bkg_data(tileIndex, 4, ringsFireTileset);
+        break;
+    case ZELDA_WEAPON_ROARSTICK:
+        set_bkg_data(tileIndex, 4, roarStickTileset);
+        break;
+    case ZELDA_WEAPON_SHORTAXE:
+        set_bkg_data(tileIndex, 4, shortAxeTileset);
+        break;
+    case ZELDA_WEAPON_TURQUOISERING:
+        set_bkg_data(tileIndex, 4, turquoiseRingTileset);
+        break;
+    case ZELDA_WEAPON_WAND:
+        // set_bkg_data(tileIndex, 4, );
+        break;
+    default:
+        break;
+    }
+}
+
+void updateWeapons(UBYTE moveLeft)
+{
+
+    if (!moveLeft && scrollOffset > 1)
+    {
+        // add a new tile to VRAM
+        addWeaponToVram(weapons[scrollOffset + 6]);
+        placeItemOnScreen(weaponSlots[0], weaponContainer, 0);
+    }
+
+    UINT8 slot = 0;
+    for (UINT8 i = 0; i < maxItemsOnScreen; i++)
+    {
+        // items pushed to beginning of array (2nd overwrite)
+        if (scrollOffset + i > 15)
+        {
+            placeItemOnScreen(weaponSlots[scrollOffset + i - 16], weaponContainer, slot);
+        }
+        // items pushed to beginning of array (1st overwrite)
+        else if (scrollOffset + i > 7)
+        {
+            placeItemOnScreen(weaponSlots[scrollOffset + i - 8], weaponContainer, slot);
+        }        
+        else
+        {
+            placeItemOnScreen(weaponSlots[scrollOffset + i], weaponContainer, slot);
+        }
+
+        slot += 2;
+    }
+
+    // update the 6 onscreen weapons
+    set_bkg_tiles(4, 15, 12, 2, weaponContainer);
 }
 
 UBYTE CanScrollLeft()
@@ -234,17 +243,7 @@ UBYTE CanScrollLeft()
 
 UBYTE CanScrollRight()
 {
-    return scrollOffset < totalTreasuresFound - maxItemsOnScreen;
-}
-
-UBYTE CanScrollUp()
-{
-    return scrollOffset > 0;
-}
-
-UBYTE CanScrollDown()
-{
-    return scrollOffset < totalWeaponsFound - maxItemsOnScreen;
+    return scrollOffset < totalWeaponsFound - maxItemsOnScreen - 1;
 }
 
 void ScrollLeft()
@@ -252,7 +251,7 @@ void ScrollLeft()
     if (CanScrollLeft())
     {
         scrollOffset--;
-        populateTreasures();
+        updateWeapons(1);
     }
 }
 
@@ -261,25 +260,7 @@ void ScrollRight()
     if (CanScrollRight())
     {
         scrollOffset++;
-        populateTreasures();
-    }
-}
-
-void ScrollUp()
-{
-    if (CanScrollUp())
-    {
-        scrollOffset--;
-        updateWeapons();
-    }
-}
-
-void ScrollDown()
-{
-    if (CanScrollDown())
-    {
-        scrollOffset++;
-        updateWeapons();
+        updateWeapons(0);
     }
 }
 
@@ -307,7 +288,7 @@ void main()
 
     // update the weapon tiles
     initialiseWeapons();
-    set_bkg_tiles(4, 15, 12, 2, weaponMap);
+    set_bkg_tiles(4, 15, 12, 2, weaponContainer);
 
     // weaponMap[0] = turquoiseRingMap[0];
     // weaponMap[1] = turquoiseRingMap[1];
@@ -337,14 +318,6 @@ void main()
             break;
         case J_RIGHT:
             ScrollRight();
-            delay(100);
-            break;
-        case J_UP:
-            ScrollUp();
-            delay(100);
-            break;
-        case J_DOWN:
-            ScrollDown();
             delay(100);
             break;
         }
