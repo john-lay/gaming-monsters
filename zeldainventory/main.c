@@ -120,21 +120,35 @@ void initialiseWeapons()
     // weaponMapIndex += 2;
 }
 
-void addWeaponToVram(ZELDA_WEAPONS weapon)
+void addWeaponToVram(ZELDA_WEAPONS weapon, UBYTE moveLeft)
 {
     // tile index starts at 54 and moves 4 tiles for each new item
     UINT8 tileIndex = 54;
 
-    if (scrollOffset > 2)
+    if (!moveLeft)
     {
-        tileIndex += (scrollOffset - 2) * 4;
-    }
+        if (scrollOffset > 2)
+        {
+            tileIndex += (scrollOffset - 2) * 4;
+        }
 
-    // check if we've written to the end of 8*4 tile slots reserved for weapons
-    if (scrollOffset > 9)
+        // check if we've written to the end of 8*4 tile slots reserved for weapons
+        if (scrollOffset >= 10)
+        {
+            tileIndex = 54;
+            tileIndex += (scrollOffset - 10) * 4;
+        }
+    }
+    else
     {
-        tileIndex = 54;
-        tileIndex += (scrollOffset - 10) * 4;
+        tileIndex += (scrollOffset) * 4;
+
+        // check if we've written to the end of 8*4 tile slots reserved for weapons
+        if (scrollOffset >= 8)
+        {
+            tileIndex = 54;
+            tileIndex += (scrollOffset - 8) * 4;
+        }
     }
 
     switch (weapon)
@@ -203,11 +217,16 @@ void addWeaponToVram(ZELDA_WEAPONS weapon)
 
 void updateWeapons(UBYTE moveLeft)
 {
-
+    if (moveLeft)
+    {
+        // add a new tile to VRAM
+        addWeaponToVram(weapons[scrollOffset], moveLeft);
+        placeItemOnScreen(weaponSlots[0], weaponContainer, 0);
+    }
     if (!moveLeft && scrollOffset > 1)
     {
         // add a new tile to VRAM
-        addWeaponToVram(weapons[scrollOffset + 6]);
+        addWeaponToVram(weapons[scrollOffset + 6], moveLeft);
         placeItemOnScreen(weaponSlots[0], weaponContainer, 0);
     }
 
@@ -215,15 +234,15 @@ void updateWeapons(UBYTE moveLeft)
     for (UINT8 i = 0; i < maxItemsOnScreen; i++)
     {
         // items pushed to beginning of array (2nd overwrite)
-        if (scrollOffset + i > 15)
+        if (scrollOffset + i >= 16)
         {
             placeItemOnScreen(weaponSlots[scrollOffset + i - 16], weaponContainer, slot);
         }
         // items pushed to beginning of array (1st overwrite)
-        else if (scrollOffset + i > 7)
+        else if (scrollOffset + i >= 8)
         {
             placeItemOnScreen(weaponSlots[scrollOffset + i - 8], weaponContainer, slot);
-        }        
+        }
         else
         {
             placeItemOnScreen(weaponSlots[scrollOffset + i], weaponContainer, slot);
@@ -243,7 +262,7 @@ UBYTE CanScrollLeft()
 
 UBYTE CanScrollRight()
 {
-    return scrollOffset < totalWeaponsFound - maxItemsOnScreen - 1;
+    return scrollOffset < totalWeaponsFound - maxItemsOnScreen;
 }
 
 void ScrollLeft()
