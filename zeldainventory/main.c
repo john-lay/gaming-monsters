@@ -10,6 +10,9 @@ UINT8 totalTreasuresFound = 10;                      // calculated at the same t
 UINT8 totalWeaponsFound = 18;
 const UINT8 maxItemsOnScreen = 6;
 
+// tile index starts at 54 and moves 4 tiles for each new item
+UINT8 tileIndex = 54;
+
 unsigned char treasureMap[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -120,37 +123,8 @@ void initialiseWeapons()
     // weaponMapIndex += 2;
 }
 
-void addWeaponToVram(ZELDA_WEAPONS weapon, UBYTE moveLeft)
+void addWeaponToVram(ZELDA_WEAPONS weapon, UINT8 tileIndex)
 {
-    // tile index starts at 54 and moves 4 tiles for each new item
-    UINT8 tileIndex = 54;
-
-    if (!moveLeft)
-    {
-        if (scrollOffset > 2)
-        {
-            tileIndex += (scrollOffset - 2) * 4;
-        }
-
-        // check if we've written to the end of 8*4 tile slots reserved for weapons
-        if (scrollOffset >= 10)
-        {
-            tileIndex = 54;
-            tileIndex += (scrollOffset - 10) * 4;
-        }
-    }
-    else
-    {
-        tileIndex += (scrollOffset) * 4;
-
-        // check if we've written to the end of 8*4 tile slots reserved for weapons
-        if (scrollOffset >= 8)
-        {
-            tileIndex = 54;
-            tileIndex += (scrollOffset - 8) * 4;
-        }
-    }
-
     switch (weapon)
     {
     case ZELDA_WEAPON_BOOMERANG:
@@ -215,21 +189,8 @@ void addWeaponToVram(ZELDA_WEAPONS weapon, UBYTE moveLeft)
     }
 }
 
-void updateWeapons(UBYTE moveLeft)
+void updateWeapons()
 {
-    if (moveLeft)
-    {
-        // add a new tile to VRAM
-        addWeaponToVram(weapons[scrollOffset], moveLeft);
-        placeItemOnScreen(weaponSlots[0], weaponContainer, 0);
-    }
-    if (!moveLeft && scrollOffset > 1)
-    {
-        // add a new tile to VRAM
-        addWeaponToVram(weapons[scrollOffset + 6], moveLeft);
-        placeItemOnScreen(weaponSlots[0], weaponContainer, 0);
-    }
-
     UINT8 slot = 0;
     for (UINT8 i = 0; i < maxItemsOnScreen; i++)
     {
@@ -270,7 +231,23 @@ void ScrollLeft()
     if (CanScrollLeft())
     {
         scrollOffset--;
-        updateWeapons(1);
+
+        // calculate tile index
+        tileIndex = 54;
+        tileIndex += (scrollOffset)*4;
+
+        // check if we've written to the end of 8*4 tile slots reserved for weapons
+        if (scrollOffset >= 8)
+        {
+            tileIndex = 54;
+            tileIndex += (scrollOffset - 8) * 4;
+        }
+
+        // add a new tile to VRAM
+        addWeaponToVram(weapons[scrollOffset], tileIndex);
+        placeItemOnScreen(weaponSlots[0], weaponContainer, 0);
+
+        updateWeapons();
     }
 }
 
@@ -279,7 +256,30 @@ void ScrollRight()
     if (CanScrollRight())
     {
         scrollOffset++;
-        updateWeapons(0);
+
+        // calculate the tile index
+        tileIndex = 54;
+        
+        if (scrollOffset > 2)
+        {
+            tileIndex += (scrollOffset - 2) * 4;
+        }
+
+        // check if we've written to the end of 8*4 tile slots reserved for weapons
+        if (scrollOffset >= 10)
+        {
+            tileIndex = 54;
+            tileIndex += (scrollOffset - 10) * 4;
+        }
+
+        // add a new tile to VRAM
+        if (scrollOffset > 1)
+        {
+            addWeaponToVram(weapons[scrollOffset + 6], tileIndex);
+            placeItemOnScreen(weaponSlots[0], weaponContainer, 0);
+        }
+
+        updateWeapons();
     }
 }
 
