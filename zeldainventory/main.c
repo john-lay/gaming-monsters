@@ -13,7 +13,7 @@ UINT8 totalWeaponsFound = 19; // calculated at the same time as treasures[] base
 UINT8 weaponTileIndex = 54;   // tile index starts at 54 and moves 4 tiles for each new item
 
 UINT8 treasureScrollOffset = 0;
-UINT8 totalTreasuresFound = 29;
+UINT8 totalTreasuresFound = 41;
 UINT8 treasureTileIndex = 86; // tile index starts at 86 and moves 4 tiles for each new item
 
 unsigned char treasureContainer[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -22,19 +22,18 @@ unsigned char treasureContainer[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0
 unsigned char weaponContainer[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-// TODO: solve large arrays > 32 elements look up causing issues.
-ZELDA_TREASURES treasures[29] = {ZELDA_TREASURE_BLACKORB,
+ZELDA_TREASURES treasures[41] = {ZELDA_TREASURE_BLACKORB,
                                  ZELDA_TREASURE_BONE,
                                  ZELDA_TREASURE_BOUQUET,
                                  ZELDA_TREASURE_CANDLE,
                                  ZELDA_TREASURE_COAL,
                                  ZELDA_TREASURE_COMPASS1,
-                                 //  ZELDA_TREASURE_COMPASS2,
-                                 //  ZELDA_TREASURE_COMPASS3,
-                                 //  ZELDA_TREASURE_COMPASS4,
-                                 //  ZELDA_TREASURE_COMPASS5,
-                                 //  ZELDA_TREASURE_COMPASS6,
-                                 //  ZELDA_TREASURE_COMPASS7,
+                                 ZELDA_TREASURE_COMPASS2,
+                                 ZELDA_TREASURE_COMPASS3,
+                                 ZELDA_TREASURE_COMPASS4,
+                                 ZELDA_TREASURE_COMPASS5,
+                                 ZELDA_TREASURE_COMPASS6,
+                                 ZELDA_TREASURE_COMPASS7,
                                  ZELDA_TREASURE_DIAMOND,
                                  ZELDA_TREASURE_EMPTYBOTTLE,
                                  ZELDA_TREASURE_FLUTE,
@@ -46,12 +45,12 @@ ZELDA_TREASURES treasures[29] = {ZELDA_TREASURE_BLACKORB,
                                  ZELDA_TREASURE_LIFEPOTION,
                                  ZELDA_TREASURE_MAGICSHIELD,
                                  ZELDA_TREASURE_MAP1,
-                                 //  ZELDA_TREASURE_MAP2,
-                                 //  ZELDA_TREASURE_MAP3,
-                                 //  ZELDA_TREASURE_MAP4,
-                                 //  ZELDA_TREASURE_MAP5,
-                                 //  ZELDA_TREASURE_MAP6,
-                                 //  ZELDA_TREASURE_MAP7,
+                                 ZELDA_TREASURE_MAP2,
+                                 ZELDA_TREASURE_MAP3,
+                                 ZELDA_TREASURE_MAP4,
+                                 ZELDA_TREASURE_MAP5,
+                                 ZELDA_TREASURE_MAP6,
+                                 ZELDA_TREASURE_MAP7,
                                  ZELDA_TREASURE_PLANK,
                                  ZELDA_TREASURE_RAFT,
                                  ZELDA_TREASURE_REDBOOTS,
@@ -462,8 +461,18 @@ void updateTreasures()
     slot = 0;
     for (UINT8 i = 0; i < maxItemsOnScreen; i++)
     {
+        // items pushed to beginning of array (5th overwrite)
+        if (treasureScrollOffset + i >= 40)
+        {
+            placeItemOnScreen(treasureSlots[treasureScrollOffset + i - 40], treasureContainer, slot);
+        }
+        // items pushed to beginning of array (4th overwrite)
+        else if (treasureScrollOffset + i >= 32)
+        {
+            placeItemOnScreen(treasureSlots[treasureScrollOffset + i - 32], treasureContainer, slot);
+        }
         // items pushed to beginning of array (3rd overwrite)
-        if (treasureScrollOffset + i >= 24)
+        else if (treasureScrollOffset + i >= 24)
         {
             placeItemOnScreen(treasureSlots[treasureScrollOffset + i - 24], treasureContainer, slot);
         }
@@ -510,7 +519,17 @@ void ScrollTreasuresLeft()
         treasureTileIndex += (treasureScrollOffset)*4;
 
         // check if we've written to the end of 8*4 tile slots reserved for weapons
-        if (treasureScrollOffset >= 16)
+        if (treasureScrollOffset >= 32)
+        {
+            treasureTileIndex = 86;
+            treasureTileIndex += (treasureScrollOffset - 32) * 4;
+        }
+        else if (treasureScrollOffset >= 24)
+        {
+            treasureTileIndex = 86;
+            treasureTileIndex += (treasureScrollOffset - 24) * 4;
+        }
+        else if (treasureScrollOffset >= 16)
         {
             treasureTileIndex = 86;
             treasureTileIndex += (treasureScrollOffset - 16) * 4;
@@ -544,7 +563,17 @@ void ScrollTreasuresRight()
         }
 
         // check if we've written to the end of 8*4 tile slots reserved for treasures
-        if (treasureScrollOffset >= 18)
+        if (treasureScrollOffset >= 34)
+        {
+            treasureTileIndex = 86;
+            treasureTileIndex += (treasureScrollOffset - 34) * 4;
+        }
+        else if (treasureScrollOffset >= 26)
+        {
+            treasureTileIndex = 86;
+            treasureTileIndex += (treasureScrollOffset - 26) * 4;
+        }
+        else if (treasureScrollOffset >= 18)
         {
             treasureTileIndex = 86;
             treasureTileIndex += (treasureScrollOffset - 18) * 4;
