@@ -7,6 +7,7 @@ const UINT8 maxItemsOnScreen = 6;
 ZELDA_TREASURES equipped = ZELDA_TREASURE_UNDEFINED; // this will be read from GB Studio
 UINT8 highlighted = 0;                               // if the equipped treasure is visible this is set to 1-6
 UINT8 slot = 0;
+UINT8 offset = 0; // used to calculate the offset as we overwrite the 8 tiles reserved for treasures
 
 UINT8 weaponScrollOffset = 0;
 UINT8 totalWeaponsFound = 19; // calculated at the same time as treasures[] based on GB Studio interrogation
@@ -459,32 +460,14 @@ void initialiseTreasures()
 void updateTreasures()
 {
     slot = 0;
+    offset = 0;
     for (UINT8 i = 0; i < maxItemsOnScreen; i++)
     {
-        // items pushed to beginning of array (5th overwrite)
-        if (treasureScrollOffset + i >= 40)
+        // items pushed to beginning of array (as we've written to the 8 available tiles)
+        if (treasureScrollOffset + i >= 8)
         {
-            placeItemOnScreen(treasureSlots[treasureScrollOffset + i - 40], treasureContainer, slot);
-        }
-        // items pushed to beginning of array (4th overwrite)
-        else if (treasureScrollOffset + i >= 32)
-        {
-            placeItemOnScreen(treasureSlots[treasureScrollOffset + i - 32], treasureContainer, slot);
-        }
-        // items pushed to beginning of array (3rd overwrite)
-        else if (treasureScrollOffset + i >= 24)
-        {
-            placeItemOnScreen(treasureSlots[treasureScrollOffset + i - 24], treasureContainer, slot);
-        }
-        // items pushed to beginning of array (2nd overwrite)
-        else if (treasureScrollOffset + i >= 16)
-        {
-            placeItemOnScreen(treasureSlots[treasureScrollOffset + i - 16], treasureContainer, slot);
-        }
-        // items pushed to beginning of array (1st overwrite)
-        else if (treasureScrollOffset + i >= 8)
-        {
-            placeItemOnScreen(treasureSlots[treasureScrollOffset + i - 8], treasureContainer, slot);
+            offset = (treasureScrollOffset + i) / 8;
+            placeItemOnScreen(treasureSlots[treasureScrollOffset + i - (offset * 8)], treasureContainer, slot);
         }
         else
         {
@@ -515,30 +498,11 @@ void ScrollTreasuresLeft()
         treasureScrollOffset--;
 
         // calculate tile index
-        treasureTileIndex = 86;
-        treasureTileIndex += (treasureScrollOffset)*4;
-
+        offset = 0;
         // check if we've written to the end of 8*4 tile slots reserved for weapons
-        if (treasureScrollOffset >= 32)
-        {
-            treasureTileIndex = 86;
-            treasureTileIndex += (treasureScrollOffset - 32) * 4;
-        }
-        else if (treasureScrollOffset >= 24)
-        {
-            treasureTileIndex = 86;
-            treasureTileIndex += (treasureScrollOffset - 24) * 4;
-        }
-        else if (treasureScrollOffset >= 16)
-        {
-            treasureTileIndex = 86;
-            treasureTileIndex += (treasureScrollOffset - 16) * 4;
-        }
-        else if (treasureScrollOffset >= 8)
-        {
-            treasureTileIndex = 86;
-            treasureTileIndex += (treasureScrollOffset - 8) * 4;
-        }
+        offset = treasureScrollOffset / 8;
+        treasureTileIndex = 86;
+        treasureTileIndex += (treasureScrollOffset - (offset * 8)) * 4;
 
         // add a new tile to VRAM
         addTreasureToVram(treasures[treasureScrollOffset], treasureTileIndex);
@@ -563,25 +527,18 @@ void ScrollTreasuresRight()
         }
 
         // check if we've written to the end of 8*4 tile slots reserved for treasures
-        if (treasureScrollOffset >= 34)
+        offset = 0;
+        if (treasureScrollOffset >= 10)
         {
+            // to calculate the offset we need to know how many times we've overwritten the 4*8 tiles reserved for treasures
+            // divide the offset by 8 i.e. 20/8 = 2 (with no remainder)
+            // multiple the result by 8 i.e. 2*8 = 16;
+            // add an offset of 2 because we're writing 2 tiles ahead of what we're rendering
+            offset = treasureScrollOffset / 8;
+            offset = offset * 8;
+            offset += 2;
             treasureTileIndex = 86;
-            treasureTileIndex += (treasureScrollOffset - 34) * 4;
-        }
-        else if (treasureScrollOffset >= 26)
-        {
-            treasureTileIndex = 86;
-            treasureTileIndex += (treasureScrollOffset - 26) * 4;
-        }
-        else if (treasureScrollOffset >= 18)
-        {
-            treasureTileIndex = 86;
-            treasureTileIndex += (treasureScrollOffset - 18) * 4;
-        }
-        else if (treasureScrollOffset >= 10)
-        {
-            treasureTileIndex = 86;
-            treasureTileIndex += (treasureScrollOffset - 10) * 4;
+            treasureTileIndex += (treasureScrollOffset - offset) * 4;
         }
 
         // add a new tile to VRAM
