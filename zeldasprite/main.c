@@ -2,15 +2,25 @@
 #include "checkerTile.c"
 
 UINT8 *beginSpriteMem = (UINT8 *)0x8000;
+UINT8 checkerTileIndex = 16;
 
 void LookUpTile()
 {
-    if (*beginSpriteMem == CheckerTile[0] &&
-        *(beginSpriteMem + 0x0001) == CheckerTile[1])
+    for(UINT8 i = 0; i < 128; i+=16)
+    {
+    if (*(beginSpriteMem + i) == CheckerTile[checkerTileIndex] 
+        && *(beginSpriteMem + i + 1) == CheckerTile[checkerTileIndex + 1]
+        && *(beginSpriteMem + i + 2) == CheckerTile[checkerTileIndex + 2]
+        && *(beginSpriteMem + i + 3) == CheckerTile[checkerTileIndex + 3]
+        && *(beginSpriteMem + i + 4) == CheckerTile[checkerTileIndex + 4]
+        && *(beginSpriteMem + i + 5) == CheckerTile[checkerTileIndex + 5]
+        && *(beginSpriteMem + i + 6) == CheckerTile[checkerTileIndex + 6]
+        && *(beginSpriteMem + i + 7) == CheckerTile[checkerTileIndex + 7])
     {
         *beginSpriteMem = 0xa0;
     }
-
+    
+    }
     HIDE_SPRITES;
     SHOW_SPRITES;
 }
