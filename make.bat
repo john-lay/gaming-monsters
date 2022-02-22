@@ -1,6 +1,6 @@
 @echo off
 
-set project="zeldasprite"
+set project="zeldaanimate"
 if exist %project%\main.gb del %project%\main.gb
 if exist %project%\main.o del %project%\main.o
 if exist %project%\main.lst del %project%\main.lst
